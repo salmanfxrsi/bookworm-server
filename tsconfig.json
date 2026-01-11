@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    /* File layout */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Environment settings */
+    "module": "commonjs",
+    "target": "es2020", // Stable, widely supported
+    "lib": ["es2020"], // Node supports ES2020 features
+    "types": ["node"], // Needed for Node globals
+
+    /* Module interoperability */
+    "esModuleInterop": true, // Fixes import express from "express" issue
+    "allowSyntheticDefaultImports": true,
+
+    /* Output */
+    "sourceMap": true, // Useful for debugging
+    "declaration": false, // Not building a library
+    "declarationMap": false,
+
+    /* Type safety */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Build safety */
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
