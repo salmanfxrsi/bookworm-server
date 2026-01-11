@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express, { Application } from "express";
 import dotenv from "dotenv";
 import genreRoutes from "./routes/genre.routes";
@@ -7,6 +8,7 @@ dotenv.config();
 
 const app: Application = express();
 
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(express.json());
 
 app.use("/api/genres", genreRoutes);
