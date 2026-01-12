@@ -1,12 +1,12 @@
-import express from "express";
+import { Router } from "express";
 import {
-  createBook,
   getBooks,
+  createBook,
   updateBook,
   deleteBook,
 } from "../controllers/book.controller";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", getBooks);
 router.post("/", createBook);
