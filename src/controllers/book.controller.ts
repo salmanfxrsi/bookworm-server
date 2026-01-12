@@ -26,8 +26,50 @@ export const createBook = async (req: Request, res: Response) => {
 
 export const getBooks = async (req: Request, res: Response) => {
   try {
-    const books = await Book.find().populate("genre").sort({ title: 1 });
-    res.status(200).json({ books });
+    let {
+      search = "",
+      genres = "",
+      rating = "",
+      page = "1",
+      limit = "8",
+    } = req.query;
+
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 8;
+    const skip = (pageNum - 1) * limitNum;
+    const filter: any = {};
+
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search as string, $options: "i" } },
+        { author: { $regex: search as string, $options: "i" } },
+      ];
+    }
+
+    if (genres) {
+      const genresArray = (genres as string).split(",");
+      filter.genre = { $in: genresArray };
+    }
+
+    if (rating) {
+      filter.avgRating = { $gte: Number(rating) };
+    }
+
+    const total = await Book.countDocuments(filter);
+
+    const books = await Book.find(filter)
+      .populate("genre")
+      .sort({ title: 1 })
+      .skip(skip)
+      .limit(limitNum);
+
+    res.status(200).json({
+      total,
+      page: pageNum,
+      limit: limitNum,
+      totalPages: Math.ceil(total / limitNum),
+      data: books,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
