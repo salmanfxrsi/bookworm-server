@@ -1,12 +1,7 @@
-import express from "express";
-import {
-  createGenre,
-  getGenres,
-  updateGenre,
-  deleteGenre,
-} from "../controllers/genre.controller";
+import { Router } from "express";
+import { getGenres, createGenre, updateGenre, deleteGenre } from "../controllers/genre.controller";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", getGenres);
 router.post("/", createGenre);
