@@ -4,15 +4,21 @@ import Book from "../models/Book";
 
 export const getReviews = async (req: Request, res: Response) => {
   try {
-    const { bookId, status, page = "1", limit = "10" } = req.query;
+    const { bookName, status, page = "1", limit = "10" } = req.query;
 
     const filter: any = {};
-    if (bookId) filter.book = bookId;
     if (
       status &&
       ["pending", "approved", "rejected"].includes(String(status))
     ) {
       filter.status = status;
+    }
+
+    if (bookName) {
+      const books = await Book.find({
+        title: { $regex: bookName as string, $options: "i" },
+      }).select("_id");
+      filter.book = { $in: books.map((b) => b._id) };
     }
 
     const pageNum = parseInt(page as string) || 1;
